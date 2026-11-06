@@ -297,6 +297,72 @@
   </main>
 
   <footer>
+    
+<section id="vendeur" style="padding:40px 7%; background:#fff;">
+  <h2 style="font-size:28px; margin-bottom:15px;">
+    Espace vendeur
+  </h2>
+
+  <p style="margin-bottom:25px;">
+    Rejoignez Zaamarket et commencez à vendre vos produits.
+  </p>
+
+  <div style="max-width:600px; background:#f5f5f5;
+              padding:25px; border-radius:12px;">
+
+    <h3 style="margin-bottom:20px;">
+      Créer mon compte vendeur
+    </h3>
+
+    <form id="seller-form">
+
+      <label>Nom de la boutique</label>
+      <input type="text" id="seller-shop"
+        placeholder="Ex : Ma Boutique"
+        required
+        style="width:100%;padding:12px;margin:8px 0 18px;">
+
+      <label>Nom du vendeur</label>
+      <input type="text" id="seller-name"
+        placeholder="Votre nom"
+        required
+        style="width:100%;padding:12px;margin:8px 0 18px;">
+
+      <label>Adresse e-mail</label>
+      <input type="email" id="seller-email"
+        placeholder="exemple@email.com"
+        required
+        style="width:100%;padding:12px;margin:8px 0 18px;">
+
+      <label>Numéro WhatsApp</label>
+      <input type="tel" id="seller-phone"
+        placeholder="+226 ..."
+        required
+        style="width:100%;padding:12px;margin:8px 0 18px;">
+
+      <label>Catégorie de produits</label>
+      <select id="seller-category"
+        style="width:100%;padding:12px;margin:8px 0 18px;">
+        <option>Mode</option>
+        <option>Électronique</option>
+        <option>Scolaire</option>
+        <option>Maison</option>
+        <option>Autres</option>
+      </select>
+
+      <button type="submit" style="width:100%;">
+        Créer mon espace vendeur
+      </button>
+
+    </form>
+
+    <p id="seller-message"
+       style="margin-top:20px;color:#FF7900;font-weight:bold;">
+    </p>
+
+  </div>
+</section>
+
     <p>© 2026 <span>Zaamarket</span> - Tous droits réservés.</p>
     <p>Tout ce que vous aimez, au même endroit.</p>
   </footer>
@@ -406,6 +472,24 @@
       .addEventListener("input", renderProducts);
 
     renderProducts();
+    
+document.getElementById("seller-form")
+  .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const shop = document.getElementById("seller-shop").value;
+
+    const name = document.getElementById("seller-name").value;
+
+    document.getElementById("seller-message").textContent =
+      "Bienvenue " + name +
+      " ! Votre boutique " + shop +
+      " est prête à être configurée.";
+
+    this.reset();
+  });
+
   </script>
 
 </body>
