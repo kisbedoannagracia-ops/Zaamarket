@@ -412,4 +412,10 @@ const SUPABASE_ANON_KEY = "sb_publishable_8SykHaHxiwFk9w-8qGRnYw_wczXEohe";
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </html>
-
+<script>
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+console.log("Connexion Supabase initialisée !");
+</script>
