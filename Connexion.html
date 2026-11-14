@@ -1,1 +1,100 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion vendeur - Zaamarket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #F5F5F5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 { text-align: center; }
+    span { color: #FF7900; }
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 15px;
+      box-sizing: border-box;
+      border-radius: 7px;
+    }
+    input { border: 1px solid #ddd; }
+    button {
+      background: #FF7900;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message { margin-top: 15px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>Zaa<span>market</span></h1>
+  <h2>Connexion vendeur</h2>
+
+  <form id="login-form">
+    <input id="email" type="email"
+      placeholder="Adresse e-mail" required>
+
+    <input id="password" type="password"
+      placeholder="Mot de passe" required>
+
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <p id="message"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jdhwmiazasotgomwdcvx.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_8SykHaHxiwFk9w-8qGRnYw_wczXEohe";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+document.getElementById("login-form")
+.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("message");
+
+  message.textContent = "Connexion en cours...";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    message.textContent = "Erreur : " + error.message;
+    return;
+  }
+
+  window.location.href = "vendeur.html";
+});
+</script>
+
+</body>
+</html>
+
