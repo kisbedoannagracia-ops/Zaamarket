@@ -389,7 +389,7 @@ document.getElementById("product-form")
       stock: Number(document.getElementById("product-stock").value),
       actif: true
     };
-
+console.log("ID vendeur envoyé :", product.vendeur_id);
     const { error } = await supabaseClient
       .from("produits")
       .insert([product]);
