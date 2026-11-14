@@ -329,54 +329,40 @@ const SUPABASE_ANON_KEY = "sb_publishable_8SykHaHxiwFk9w-8qGRnYw_wczXEohe";
 
   let products = [];
 let vendeurId = "9112cc21-77e9-421a-8704-1949e3900d7f";
-  function renderProducts() {
+function renderProducts() {
+  const list = document.getElementById("product-list");
 
-    const list = document.getElementById("product-list");
+  document.getElementById("product-count").textContent =
+    products.length;
 
-    document.getElementById("product-count").textContent =
-      products.length;
+  list.innerHTML = "";
 
-    list.innerHTML = "";
-
-    if (products.length === 0) {
-
-      list.innerHTML =
-        '<p class="empty">Aucun produit ajouté pour le moment.</p>';
-
-      return;
-    }
-
-    products.forEach((product, index) => {
-
-      const card = document.createElement("div");
-
-      card.className = "product";
-
-      card.innerHTML = `
-        <h3>${product.name}</h3>
-
-        <p>Catégorie : ${product.category}</p>
-
-        <p>Stock : ${product.stock}</p>
-
-        <strong>
-          ${product.price.toLocaleString("fr-FR")} FCFA
-        </strong>
-
-        <br>
-
-        <button class="delete"
-          onclick="deleteProduct(${index})">
-          Supprimer
-        </button>
-      `;
-
-      list.appendChild(card);
-
-    });
-
+  if (products.length === 0) {
+    list.innerHTML =
+      '<p class="empty">Aucun produit ajouté pour le moment.</p>';
+    return;
   }
 
+  products.forEach((product, index) => {
+    const card = document.createElement("div");
+    card.className = "product";
+
+    card.innerHTML = `
+      <h3>${product.nom}</h3>
+      <p>Catégorie : ${product.categorie}</p>
+      <p>Stock : ${product.stock}</p>
+      <strong>
+        ${Number(product.prix).toLocaleString("fr-FR")} FCFA
+      </strong>
+      <br>
+      <button class="delete" onclick="deleteProduct(${index})">
+        Supprimer
+      </button>
+    `;
+
+    list.appendChild(card);
+  });
+}
 document.getElementById("product-form")
   .addEventListener("submit", async function(event) {
     event.preventDefault();
