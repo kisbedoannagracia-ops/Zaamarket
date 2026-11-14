@@ -390,7 +390,7 @@ document.getElementById("product-form")
       actif: true
     };
 
-    const { data, error } = await supabaseClient
+    const { error } = await supabaseClient
       .from("produits")
       .insert([product]);
 
@@ -402,36 +402,6 @@ document.getElementById("product-form")
     alert("Produit enregistré avec succès !");
     this.reset();
   });
-      const product = {
-        name: document.getElementById("product-name").value,
-        price: Number(document.getElementById("product-price").value),
-        category: document.getElementById("product-category").value,
-        stock: Number(document.getElementById("product-stock").value)
-      };
-
-      products.push(product);
-
-      renderProducts();
-
-      this.reset();
-
-    });
-
-      const product = {
-        name: document.getElementById("product-name").value,
-        price: Number(document.getElementById("product-price").value),
-        category: document.getElementById("product-category").value,
-        stock: Number(document.getElementById("product-stock").value)
-      };
-
-      products.push(product);
-
-      renderProducts();
-
-      this.reset();
-
-    });
-
   function deleteProduct(index) {
 
     products.splice(index, 1);
