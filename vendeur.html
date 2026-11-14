@@ -405,21 +405,12 @@ console.log("ID vendeur envoyé :", product.vendeur_id);
     alert("Produit enregistré avec succès !");
     this.reset();
   });
-async function deleteProduct(index) {
-
-  const product = products[index];
-
-  if (!product) return;
-
-  if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) {
-    return;
-  }
-
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("produits")
     .delete()
     .eq("id", product.id)
-    .eq("vendeur_id", vendeurId);
+    .eq("vendeur_id", vendeurId)
+    .select("id");
 
   if (error) {
     alert("Erreur de suppression : " + error.message);
