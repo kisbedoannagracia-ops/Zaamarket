@@ -363,6 +363,23 @@ function renderProducts() {
     list.appendChild(card);
   });
 }
+async function loadProducts() {
+
+  const { data, error } = await supabaseClient
+    .from("produits")
+    .select("*")
+    .eq("vendeur_id", vendeurId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    alert("Erreur de chargement : " + error.message);
+    return;
+  }
+
+  products = data || [];
+
+  renderProducts();
+}
 document.getElementById("product-form")
   .addEventListener("submit", async function(event) {
     event.preventDefault();
