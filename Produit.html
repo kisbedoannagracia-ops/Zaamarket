@@ -1,1 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zaamarket - Nos produits</title>
 
+  <style>
+    :root {
+      --orange: #FF7900;
+      --black: #111111;
+      --gray: #F5F5F5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--gray);
+      color: var(--black);
+    }
+
+    header {
+      background: var(--black);
+      color: white;
+      padding: 22px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: var(--orange);
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      margin-left: 18px;
+    }
+
+    main {
+      padding: 35px 7%;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #00000008;
+    }
+
+    .product h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .product p {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      color: var(--orange);
+      font-size: 21px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .message {
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      color: #666;
+    }
+
+    footer {
+      background: var(--black);
+      color: white;
+      text-align: center;
+      padding: 25px;
+      margin-top: 40px;
+    }
+
+    footer span {
+      color: var(--orange);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Zaa<span>market</span></div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="vendeur.html">Espace vendeur</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Nos produits</h1>
+
+  <div id="product-list" class="products">
+    <p class="message">Chargement des produits...</p>
+  </div>
+</main>
+
+<footer>
+  © 2026 <span>Zaamarket</span> - Tout ce que vous aimez, au même endroit.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://jdhwmiazasotgomwdcvx.supabase.co";
+const SUPABASE_ANON_KEY = "REMPLACE_PAR_TA_CLE_PUBLISHABLE";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+async function afficherProduits() {
+  const liste = document.getElementById("product-list");
+
+  const { data, error } = await supabaseClient
+    .from("produits")
+    .select("nom, description, prix, categorie, stock")
+    .eq("actif", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    liste.innerHTML = '<p class="message">Impossible de charger les produits. Vérifie les autorisations Supabase.</p>';
+    console.error(error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    liste.innerHTML = '<p class="message">Aucun produit disponible pour le moment.</p>';
+    return;
+  }
+
+  liste.innerHTML = "";
+
+  data.forEach(produit => {
+    const carte = document.createElement("article");
+    carte.className = "product";
+
+    const nom = document.createElement("h2");
+    nom.textContent = produit.nom;
+
+    const categorie = document.createElement("p");
+    categorie.textContent = "Catégorie : " + produit.categorie;
+
+    const description = document.createElement("p");
+    description.textContent = produit.description || "Aucune description";
+
+    const stock = document.createElement("p");
+    stock.textContent = "Stock : " + produit.stock;
+
+    const prix = document.createElement("div");
+    prix.className = "price";
+    prix.textContent = Number(produit.prix).toLocaleString("fr-FR") + " FCFA";
+
+    carte.append(nom, categorie, description, stock, prix);
+    liste.appendChild(carte);
+  });
+}
+
+afficherProduits();
+</script>
+
+</body>
+</html>
+```
