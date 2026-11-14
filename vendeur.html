@@ -405,6 +405,16 @@ console.log("ID vendeur envoyé :", product.vendeur_id);
     alert("Produit enregistré avec succès !");
     this.reset();
   });
+async function deleteProduct(index) {
+
+  const product = products[index];
+
+  if (!product) return;
+
+  if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) {
+    return;
+  }
+
   const { data, error } = await supabaseClient
     .from("produits")
     .delete()
@@ -414,6 +424,11 @@ console.log("ID vendeur envoyé :", product.vendeur_id);
 
   if (error) {
     alert("Erreur de suppression : " + error.message);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    alert("Suppression refusée : vérifie les autorisations RLS dans Supabase.");
     return;
   }
 
