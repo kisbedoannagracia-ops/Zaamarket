@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription vendeur - Zaamarket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 30px 15px;
+    }
+    .container {
+      max-width: 420px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+    }
+    h1 { color: #FF7900; text-align: center; }
+    input, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+    }
+    input { border: 1px solid #ccc; }
+    button {
+      background: #FF7900;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message { text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Zaamarket</h1>
+  <h2>Créer un compte vendeur</h2>
+
+  <form id="signup-form">
+    <input id="nom_vendeur" placeholder="Nom du vendeur" required>
+    <input id="nom_boutique" placeholder="Nom de la boutique" required>
+    <input id="email" type="email" placeholder="Adresse e-mail" required>
+    <input id="telephone" placeholder="Téléphone" required>
+    <input id="categorie" placeholder="Catégorie de produits" required>
+    <input id="password" type="password" placeholder="Mot de passe (6 caractères minimum)" minlength="6" required>
+    <button type="submit">Créer mon compte</button>
+  </form>
+
+  <p id="message"></p>
+  <p><a href="connexion.html">Déjà inscrit ? Se connecter</a></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jdhwmiazasotgomwdcvx.supabase.co";
+
+// Reprends ici la même clé publique que dans connexion.html.
+const SUPABASE_ANON_KEY = "COLLE_ICI_TA_CLE_PUBLIQUE";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+document.getElementById("signup-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const message = document.getElementById("message");
+  message.textContent = "Création du compte en cours...";
+
+  const nom_vendeur = document.getElementById("nom_vendeur").value;
+  const nom_boutique = document.getElementById("nom_boutique").value;
+  const email = document.getElementById("email").value;
+  const telephone = document.getElementById("telephone").value;
+  const categorie = document.getElementById("categorie").value;
+  const password = document.getElementById("password").value;
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    message.textContent = "Erreur : " + error.message;
+    return;
+  }
+
+  if (!data.session) {
+    message.textContent = "Compte créé ! Vérifie ta boîte e-mail pour confirmer ton adresse, puis connecte-toi.";
+    return;
+  }
+
+  const { error: profileError } = await supabaseClient
+    .from("vendeurs")
+    .insert({
+      id: data.user.id,
+      nom_vendeur: nom_vendeur,
+      nom_boutique: nom_boutique,
+      email: email,
+      telephone: telephone,
+      categorie: categorie
+    });
+
+  if (profileError) {
+    message.textContent = "Compte créé, mais erreur du profil vendeur : " + profileError.message;
+    return;
+  }
+
+  message.textContent = "Inscription réussie ! Redirection...";
+  window.location.href = "vendeur.html";
+});
+</script>
+
+</body>
+</html>
