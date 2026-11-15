@@ -464,6 +464,16 @@ async function verifierConnexion() {
 
 verifierConnexion();
 console.log("Connexion Supabase initialisée !");
+window.deconnexion = async function() {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert("Erreur de déconnexion : " + error.message);
+    return;
+  }
+
+  window.location.href = "connexion.html";
+};
 </script>
 
 </body>
