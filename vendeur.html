@@ -446,7 +446,19 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
-loadProducts();
+async function verifierConnexion() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    window.location.href = "connexion.html";
+    return;
+  }
+
+  vendeurId = session.user.id;
+  await loadProducts();
+}
+
+verifierConnexion();
 console.log("Connexion Supabase initialisée !");
 </script>
 
