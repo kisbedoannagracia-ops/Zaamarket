@@ -489,22 +489,45 @@ const supabaseClient = window.supabase.createClient(
 
     renderProducts();
     
-document.getElementById("seller-form")
-  .addEventListener("submit", function(event) {
 
+document.getElementById("seller-form")
+  .addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const shop = document.getElementById("seller-shop").value;
+    const shop = document.getElementById("seller-shop").value.trim();
+    const name = document.getElementById("seller-name").value.trim();
+    const email = document.getElementById("seller-email").value.trim();
+    const password = document.getElementById("seller-password").value;
+    const phone = document.getElementById("seller-phone").value.trim();
+    const category = document.getElementById("seller-category").value;
 
-    const name = document.getElementById("seller-name").value;
+    const message = document.getElementById("seller-message");
+    message.textContent = "Création de votre compte en cours...";
 
-    document.getElementById("seller-message").textContent =
-      "Bienvenue " + name +
-      " ! Votre boutique " + shop +
-      " est prête à être configurée.";
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          nom: name,
+          boutique: shop,
+          telephone: phone,
+          categorie: category
+        }
+      }
+    });
+
+    if (error) {
+      message.textContent = "Erreur : " + error.message;
+      return;
+    }
+
+    message.textContent =
+      "Votre demande a été enregistrée. Vérifiez votre e-mail pour confirmer votre compte. Votre boutique devra être approuvée avant de vendre.";
 
     this.reset();
   });
+  
 
   </script>
 
